@@ -46,21 +46,20 @@ public class Jeu extends Thread {
 			int j = (i + r) % 2;
 			robots[i] = new Robot(joueurs[i].getPlayerName(), j*2800+(1-j)*200, 200, j*180, j==1);
 		}
-		for (int i = 0 ; i <2 ; i ++) {
-			r = (int) (19 * Math.random());
-			for (int j = 0 ; j < 5 ; j ++) {
-				if (distributions[r][0] == j) figure = 2;
-				else if (distributions[r][1] == j) figure = 1;
-				else figure = 0;
-				pions[5*i+j] = new Pion((1-i) * 200 + i*2800, 690 + j*280, figure);
-			}
+		r = (int) (19 * Math.random());
+		for (int j = 0 ; j < 5 ; j ++) {
+			if (distributions[r][0] == j) figure = Pion.KING;
+			else if (distributions[r][1] == j) figure = Pion.QUEEN;
+			else figure = 0;
+			pions[j] = new Pion(200, 690 + j*280, figure);
+			pions[5+j] = new Pion(2800, 690 + j*280, figure);
 		}
 		pions[10] = new Pion(1500, 1050, 0);
 		for (int i = 0 ; i <2 ; i ++) {
 			r = (int) (19 * Math.random());
 			for (int j = 0 ; j < 2 ; j ++) {
-				pions[11+2*i+j] = new Pion(800+i*350, (1+distributions[r][j])*350, 0);
-				pions[15+2*i+j] = new Pion(2200-i*350, (1+distributions[r][j])*350, 0);
+				pions[11+2*i+j] = new Pion(800+i*350, (1+distributions[r][j])*350, Pion.PAWN);
+				pions[15+2*i+j] = new Pion(2200-i*350, (1+distributions[r][j])*350, Pion.PAWN);
 			}
 		}
 		Joueur joueur;

@@ -6,6 +6,10 @@ import java.io.Serializable;
 
 public class Pion implements Serializable {
 
+	public static final int PAWN = 0;
+	public static final int QUEEN = 1;
+	public static final int KING = 2;
+	
 	/**
 	 * 
 	 */
@@ -13,7 +17,7 @@ public class Pion implements Serializable {
 	private int x, y;
 	public static int diametre = 200;
 	private Color couleur;
-	private int figure = 0; //0 = pion ; 1 = reine ; 2 = roi;
+	private int figure = PAWN; //0 = pion ; 1 = reine ; 2 = roi;
 	private int nombre = 1;
 	static int nbPions = 0;
 	private int index;
