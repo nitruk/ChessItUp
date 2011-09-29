@@ -18,7 +18,7 @@ public class Communication extends Thread {
 	private PanneauInfo pi;
 	private BufferedReader bufR;
 	private PrintStream streamW;
-	private String status;
+	private String status = "success";
 
 	public Communication (Robot robots[], Pion pions[], TableJeu tj, PanneauInfo pi, BufferedReader bufR, PrintStream streamW) {
 		this.robots = robots;
