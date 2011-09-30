@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class Pion implements Serializable {
 
-	public static final int PAWN = 0;
-	public static final int QUEEN = 1;
-	public static final int KING = 2;
+	public static final int PAWN = 1;
+	public static final int QUEEN = 2;
+	public static final int KING = 3;
 	
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class Pion implements Serializable {
 		this.x = x;
 		this.y = y;
 		this.figure = figure;
-		couleur = (figure!=0) ? Color.ORANGE : Color.YELLOW;
+		couleur = (figure!=Pion.PAWN) ? Color.ORANGE : Color.YELLOW;
 		nbPions ++;
 		index = nbPions-1;
 	}

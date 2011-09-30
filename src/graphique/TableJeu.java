@@ -113,11 +113,11 @@ public class TableJeu extends JPanel {
 			g.setFont(new Font("Arial", Font.BOLD, 20));
 			String num = ((pion.getNombre() > 1) ? ("" + pion.getNombre()) : "");
 			switch (pion.getFigure()) {
-				case 0 : 	g.drawString(num, (int) (x-10), (int) (y+5));
+				case Pion.PAWN : 	g.drawString(num, (int) (x-10), (int) (y+5));
 							break;
-				case 1 :	g.drawString(num + " Q", (int) (x-20), (int) (y+5));
+				case Pion.QUEEN :	g.drawString(num + " Q", (int) (x-20), (int) (y+5));
 							break;
-				case 2 :	g.drawString(num + " K", (int) (x-20), (int) (y+5));
+				case Pion.KING :	g.drawString(num + " K", (int) (x-20), (int) (y+5));
 			}
 			g.setFont(gOld);
 		}

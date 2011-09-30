@@ -50,11 +50,11 @@ public class Jeu extends Thread {
 		for (int j = 0 ; j < 5 ; j ++) {
 			if (distributions[r][0] == j) figure = Pion.KING;
 			else if (distributions[r][1] == j) figure = Pion.QUEEN;
-			else figure = 0;
+			else figure = Pion.PAWN;
 			pions[j] = new Pion(200, 690 + j*280, figure);
 			pions[5+j] = new Pion(2800, 690 + j*280, figure);
 		}
-		pions[10] = new Pion(1500, 1050, 0);
+		pions[10] = new Pion(1500, 1050, Pion.PAWN);
 		for (int i = 0 ; i <2 ; i ++) {
 			r = (int) (19 * Math.random());
 			for (int j = 0 ; j < 2 ; j ++) {
@@ -81,13 +81,14 @@ public class Jeu extends Thread {
 		double angle;
 		float  stepx, stepy, d;
 		boolean libre, done;
+		long start = System.currentTimeMillis();
 		try {
 			Thread.sleep(3000);
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		while (true) {
+		while (System.currentTimeMillis() < ( start + (1000 * 90))) {
 			try {
 				sleep(50) ;
 				for (int n = 0 ; n < 2 ; n ++) {
@@ -245,6 +246,7 @@ public class Jeu extends Thread {
 				e.printStackTrace();
 			}
 		}
+		end();
 	}
 
 	public void move (int n, int distance) {
@@ -273,7 +275,7 @@ public class Jeu extends Thread {
 			dx = pion.getX() - x;
 			dy = pion.getY() - y;
 		}
-		while ((!pion.getUtile() || pion.getInRobot() || ((robot.getTenu() != 19 && (pion.getFigure() != 0))) || (dx*dx + dy*dy > marge)) && (++i < 19));
+		while ((!pion.getUtile() || pion.getInRobot() || ((robot.getTenu() != 19 && (pion.getFigure() != Pion.PAWN))) || (dx*dx + dy*dy > marge)) && (++i < 19));
 		if (i < 19) {
 			if (robot.getTenu() == 19) {
 				robot.setTenu(i);
@@ -313,7 +315,7 @@ public class Jeu extends Thread {
 			Pion pion = pions[p];
 			int x = (int) (robot.getX() + Math.cos(robot.getAngle() * Math.PI / 180) * margePion);
 			int y = (int) (robot.getY() + Math.sin(robot.getAngle() * Math.PI / 180) * margePion);
-			if (movePion(p, x, y, robots[1-n]) == 0) {
+			if (movePion(p, x, y, robots[1-n]) == FREE) {
 				robot.setTenu(19);
 				pion.setInRobot(false);
 				try {
@@ -487,15 +489,41 @@ public class Jeu extends Thread {
 		return movePion(n, x, y, robot) == FREE;
 	}
 	
-	public void writeAll(String s) {
+	public void writeAll (String s) {
 		for (int n = 0 ; n < 2 ; n ++) joueurs[n].write(s);
 	}
 	
-	public void writeAll(int i) {
+	public void writeAll (int i) {
 		for (int n = 0 ; n < 2 ; n ++) joueurs[n].write(i);
 	}
 	
-	public void writeAllNumber(int i) {
+	public void writeAllNumber (int i) {
 		for (int n = 0 ; n < 2 ; n ++) joueurs[n].write((n + i) % 2);
+	}
+	
+	public void end () {
+		int x, y, valeur;
+		int points[] = new int[2];
+		for (Pion pion : pions) {
+			if (pion.getUtile() && !pion.getInRobot() && (x = pion.getX() - 447) > 0 && x < 2088 && x%348 > 80 && x%348 < 268 && (y=pion.getY())%348 > 80 && y%348 < 268) {
+				System.out.println("-----------------------------------------------");
+				System.out.println(x + " " + y);
+				valeur = pion.getFigure() * 10;
+				System.out.println(valeur);
+				if (valeur > 10) valeur *= Math.min(pion.getNombre(), 3);
+				System.out.println(valeur);
+				x /= 348;
+				y /= 348;
+				System.out.println(x + " " + y);
+				if ((((x==1)||(x==4))&&((y==1)||(y==3)))||(((x==2)||(x==3))&&(y==5))) valeur += 30;
+				System.out.println(valeur);
+				points[1-((x + y) % 2)] +=  valeur;
+				System.out.println(1-(((x + pion.getY()) / 348) % 2));
+			}
+		}
+		for (int i = 0 ; i < 2 ; i ++) {
+			System.out.println(joueurs[i].getPlayerName() + " : " + points[i]);
+			joueurs[i].end(points[i], points[1-i]);
+		}
 	}
 }

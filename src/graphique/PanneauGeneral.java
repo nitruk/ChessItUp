@@ -33,7 +33,7 @@ public class PanneauGeneral extends JPanel{
 	private Communication com;
 	
 	public PanneauGeneral () {	
-		//setPreferredSize(new Dimension (1210,700));
+		//setPreferredSize(new Dimension (994,696));
 		setBackground(couleurFond);
 		
 		Robot robots[] = new Robot[2];

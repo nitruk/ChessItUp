@@ -92,8 +92,7 @@ public class Communication extends Thread {
 					tj.repaint();
 				}
 			}
-			status = "end";
-			pi.setStatus(status);
+			pi.end(Integer.parseInt(bufR.readLine()), Integer.parseInt(bufR.readLine()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

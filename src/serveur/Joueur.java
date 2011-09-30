@@ -14,6 +14,7 @@ public class Joueur extends Thread{
 	PrintStream streamW;
 	ObjectOutputStream objectW;
 	Jeu jeu;
+	boolean fini = false;
 	
 	public Joueur (int n, String name, BufferedReader bufR, PrintStream streamW, ObjectOutputStream objectW){
 		this.n = n;
@@ -30,13 +31,12 @@ public class Joueur extends Thread{
 	
 	public void run() {
 		StringTokenizer mots;
-		long start = System.currentTimeMillis();
 		String received, command;
 
 		// boucle tant que la durée de vie du Thread est < à 90 secondes
 		try {
 	 		streamW.println("go");
-			while( System.currentTimeMillis() < ( start + (1000 * 90))) {
+			while(!fini) {
 				received = bufR.readLine();
 				mots = new StringTokenizer(received);
 				command = mots.nextToken();
@@ -83,5 +83,12 @@ public class Joueur extends Thread{
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void end (int score0, int score1) {
+		write("end");
+		write(score0);
+		write(score1);
+		fini = true;
 	}
 }
