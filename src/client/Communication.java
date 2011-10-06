@@ -106,8 +106,8 @@ public class Communication extends Thread {
 		streamW.println("move " + distance);
 	}
 	
-	public void turn (int distance) {
-		streamW.println("turn " + distance);
+	public void turn (int angle) {
+		streamW.println("turn " + angle);
 	}
 	
 	public void catchPawn () {
@@ -116,6 +116,89 @@ public class Communication extends Thread {
 	
 	public void releasePawn () {
 		streamW.println("release");
+	}
+
+	public boolean moveAndWait (int distance) {
+		move(distance);
+		for (int i = 0 ; (i < 10) && (!status.equals("active")) ; i ++) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while(status.equals("active")) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return status.equals("success");
+	}
+
+	public void turnAndWait (int angle) {
+		turn(angle);
+		for (int i = 0 ; (i < 10) && (!status.equals("active")) ; i ++) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while(status.equals("active")) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public boolean catchAndWait () {
+		catchPawn();
+		for (int i = 0 ; (i < 10) && (!status.equals("active")) ; i ++) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while(status.equals("active")) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return status.equals("success");
+	}
+
+	public boolean releaseAndWait () {
+		releasePawn();
+		for (int i = 0 ; (i < 10) && (!status.equals("active")) ; i ++) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		while(status.equals("active")) {
+			try {
+				sleep(50) ;
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		return status.equals("success");
 	}
 	
 }

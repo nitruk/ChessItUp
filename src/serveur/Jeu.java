@@ -94,7 +94,7 @@ public class Jeu extends Thread {
 				for (int n = 0 ; n < 2 ; n ++) {
 					robot = robots[n];
 					if (turns[n] != 0) {
-						if (Math.abs(turns[n]) >= Robot.turnStep) {
+						if (Math.abs(turns[n]) > Robot.turnStep) {
 							step = (turns[n] > 0) ? Robot.turnStep : -Robot.turnStep;
 							joueurs[n].write("active");
 						}

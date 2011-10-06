@@ -27,6 +27,9 @@ public class Strategie extends Thread implements KeyListener {
 		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println(com.moveAndWait(1000));
+		com.turnAndWait(90);
+		System.out.println("fini");
 		while(true) {
 			try {
 				sleep(50);
@@ -35,6 +38,7 @@ public class Strategie extends Thread implements KeyListener {
 			}
 			switch (cmd) {
 			case 1 : 	com.move(Robot.moveStep);
+						System.out.println("Turn");
 						break;
 			case 2 : 	com.move(-Robot.moveStep);
 						break;
@@ -49,6 +53,7 @@ public class Strategie extends Thread implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			cmd = 1;
+			System.out.println("Say turn");
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_DOWN){
 			cmd = 2;
@@ -72,10 +77,10 @@ public class Strategie extends Thread implements KeyListener {
 			cmd = 4;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE){
-			com.catchPawn();
+			System.out.println(com.catchAndWait());
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_CONTROL){
-			com.releasePawn();
+			System.out.println(com.releaseAndWait());
 		}
 	}
 
