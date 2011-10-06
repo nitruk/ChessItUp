@@ -30,6 +30,7 @@ public class Jeu extends Thread {
 	private Joueur joueurs[] = new Joueur[2];
 	private Robot robots[] = new Robot[2];
 	private int moves[] = new  int[2], turns[] = new  int[2];
+	private int r;
 	private Pion pions[] = new Pion[19];
 	private int distributions[][] = {{0,1}, {0,2}, {0,3}, {0,4},
 			 {1,0}, {1,2}, {1,3}, {1,4},
@@ -40,12 +41,7 @@ public class Jeu extends Thread {
 	
 	public Jeu (Joueur joueurs[]) {
 		this.joueurs = joueurs;
-		int r, figure;
-		r = (int) (2 * Math.random());
-		for (int i = 0 ; i < 2 ; i ++) {
-			int j = (i + r) % 2;
-			robots[i] = new Robot(joueurs[i].getPlayerName(), j*2800+(1-j)*200, 200, j*180, j==1);
-		}
+		int figure;
 		r = (int) (19 * Math.random());
 		for (int j = 0 ; j < 5 ; j ++) {
 			if (distributions[r][0] == j) figure = Pion.KING;
@@ -61,6 +57,11 @@ public class Jeu extends Thread {
 				pions[11+2*i+j] = new Pion(800+i*350, (1+distributions[r][j])*350, Pion.PAWN);
 				pions[15+2*i+j] = new Pion(2200-i*350, (1+distributions[r][j])*350, Pion.PAWN);
 			}
+		}
+		r = (int) (2 * Math.random());
+		for (int i = 0 ; i < 2 ; i ++) {
+			int j = (i + r) % 2;
+			robots[i] = new Robot(joueurs[i].getPlayerName(), j*2800+(1-j)*200, 200, j*180, j==1);
 		}
 		Joueur joueur;
 		for (int n = 0 ; n < 2 ; n ++) {
@@ -517,8 +518,8 @@ public class Jeu extends Thread {
 				System.out.println(x + " " + y);
 				if ((((x==1)||(x==4))&&((y==1)||(y==3)))||(((x==2)||(x==3))&&(y==5))) valeur += 30;
 				System.out.println(valeur);
-				points[1-((x + y) % 2)] +=  valeur;
-				System.out.println(1-(((x + pion.getY()) / 348) % 2));
+				points[(1-((x + y) % 2)+r) % 2] +=  valeur;
+				System.out.println((1-((x + y) % 2)+r) % 2);
 			}
 		}
 		for (int i = 0 ; i < 2 ; i ++) {
