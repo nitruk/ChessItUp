@@ -56,17 +56,14 @@ public class Communication extends Thread {
 					if (message.compareTo("robot") == 0) {
 						robot = robots[Integer.parseInt(bufR.readLine())];
 						if ((message = bufR.readLine()).compareTo("move") == 0) {
-							System.out.println("received move");
 							robot.move(Integer.parseInt(bufR.readLine()), Integer.parseInt(bufR.readLine()));
 							if (robot.getTenu() != 19) pions[robot.getTenu()].move(robot.getX(), robot.getY());
 						}
 						else if (message.compareTo("turn") == 0) {
-							System.out.println("received turn");
 							robot.turn(Integer.parseInt(bufR.readLine()));
 						}
 						else if (message.compareTo("catch") == 0) {
 							pion = pions[n = Integer.parseInt(bufR.readLine())];
-							System.out.println("received catch " + n);
 							if (robot.getTenu() == 19) {
 								robot.setTenu(n);
 								pion.setInRobot(true);
@@ -75,7 +72,6 @@ public class Communication extends Thread {
 							else pion.setInPile(pions[robot.getTenu()]);
 						}
 						else if (message.compareTo("release") == 0) {
-							System.out.println("received release");
 							pions[robot.getTenu()].setInRobot(false);
 							robot.setTenu(19);
 						}
@@ -86,7 +82,6 @@ public class Communication extends Thread {
 						int i, j;
 						pion = pions[n = Integer.parseInt(bufR.readLine())];
 						pion.move(i = Integer.parseInt(bufR.readLine()), j = Integer.parseInt(bufR.readLine()));
-						System.out.println("received pion "  + n + " " + i + " " + j);
 					}
 					else System.err.println(message);
 					tj.repaint();

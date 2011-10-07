@@ -23,9 +23,9 @@ public class Jeu extends Thread {
 	private static final int BLOCK_X = 1;
 	private static final int BLOCK_Y = 2;
 	private static final int BLOCK_ROBOT = 3;
-	private static final int BLOCK_WALLV = 4;
-	private static final int BLOCK_WALLH = 5;
-	private static final int BLOCK_PAWN = 6;
+	private static final int BLOCK_WALLV = 5;
+	private static final int BLOCK_WALLH = 6;
+	private static final int BLOCK_PAWN = 7;
 	
 	private Joueur joueurs[] = new Joueur[2];
 	private Robot robots[] = new Robot[2];
@@ -216,8 +216,8 @@ public class Jeu extends Thread {
 									if (r2 < margePion2) {
 										r = (int) Math.sqrt(r2);
 										d = (margePion - r) / (float) r;
-										retour = movePion(i, (int) (pion.getX() + Math.ceil(d * dx)), (int) (pion.getY() +  Math.ceil(d * dy)), robots[1-n]);
-										if (!(libre = (retour == FREE)) && retour != BLOCKED) libre = movePionMur(i, x, y, robots[1-n], retour, rayonRobot);
+										retour = movePion(i, (int) (pion.getX() + Math.ceil(d * dx)), (int) (pion.getY() +  Math.ceil(d * dy)));
+										if (!(libre = (retour == FREE)) && retour != BLOCKED) libre = movePionMur(i, x, y, retour, rayonRobot);
 									}
 								}
 							}
@@ -314,9 +314,9 @@ public class Jeu extends Thread {
 		int p;
 		if ((p= robot.getTenu()) != 19) {
 			Pion pion = pions[p];
-			int x = (int) (robot.getX() + Math.cos(robot.getAngle() * Math.PI / 180) * margePion);
-			int y = (int) (robot.getY() + Math.sin(robot.getAngle() * Math.PI / 180) * margePion);
-			if (movePion(p, x, y, robots[1-n]) == FREE) {
+			int x = (int) (robot.getX() + Math.cos(robot.getAngle() * Math.PI / 180) * (margePion+10));
+			int y = (int) (robot.getY() + Math.sin(robot.getAngle() * Math.PI / 180) * (margePion+10));
+			if (movePion(p, x, y) == FREE) {
 				robot.setTenu(19);
 				pion.setInRobot(false);
 				try {
@@ -342,13 +342,11 @@ public class Jeu extends Thread {
 		}
 	}
 
-	private int movePion (int n, int x, int y, Robot robot) {
+	private int movePion (int n, int x, int y) {
 		int dx, dy, r, r2, retour;
 		int etat = FREE;
 		float d;
 		Pion pion = pions[n], autre;
-		dx = robot.getX() - x;
-		dy = robot.getY() - y;
 		if ((x < rayonPion) || (x > 3*TableJeu.largeurPlateau - rayonPion)) {
 			if (y == pion.getY()) etat = BLOCKED;
 			else etat = BLOCK_X;
@@ -357,9 +355,14 @@ public class Jeu extends Thread {
 			if ((etat != FREE) || (x == pion.getX())) etat = BLOCKED;
 			else etat = BLOCK_Y;
 		}
-		if (dx*dx + dy*dy < margePion2) {
-			if ((etat != FREE) || (dx*(y-pion.getY()) - dy*(x-pion.getX()) == 0)) etat = BLOCKED;
-			else etat = BLOCK_ROBOT;
+		for (int i = 0 ; i < 2 ; i ++) {
+			dx = robots[i].getX() - x;
+			dy = robots[i].getY() - y;
+			if (dx*dx + dy*dy < margePion2) {
+				//System.out.println(robots[i].getCouleur().toString());
+				if ((etat != FREE) || (dx*(y-pion.getY()) - dy*(x-pion.getX()) == 0)) etat = BLOCKED;
+				else etat = BLOCK_ROBOT;
+			}
 		}
 		for (Mur mur : Mur.MursV) {
 			if (Math.abs(mur.getX() - x) < rayonPion) {
@@ -407,9 +410,9 @@ public class Jeu extends Thread {
 						if (dx*dx + dy*dy < margePionPion2) {
 							r = (int) Math.sqrt(r2);
 							d = (margePionPion - r) / (float) r;
-							retour = movePion(i, (int) (autre.getX() + d * dx), (int) (autre.getY() +  d * dy), robot);
+							retour = movePion(i, (int) (autre.getX() + d * dx), (int) (autre.getY() +  d * dy));
 							if (retour != FREE) {
-								if ((retour == BLOCKED) || movePionMur(i, x, y, robot, retour, rayonPion)) {
+								if ((retour == BLOCKED) || !movePionMur(i, x, y, retour, rayonPion)) {
 									if (etat == FREE) etat = BLOCK_PAWN + i;
 									else etat = BLOCKED;
 								}
@@ -435,7 +438,7 @@ public class Jeu extends Thread {
 		return etat;
 	}
 
-	private boolean movePionMur (int n, int x0, int y0, Robot robot, int etat, int rayon) {
+	private boolean movePionMur (int n, int x0, int y0, int etat, int rayon) {
 		int x, y, dx, dy;
 		float stepx, stepy, dX, dY, d;
 		Pion pion = pions[n];
@@ -451,8 +454,10 @@ public class Jeu extends Thread {
 		case BLOCK_Y :		stepx = (dx > 0) ? 1 : -1;
 							stepy = 0;
 							break;
-		case BLOCK_ROBOT :	stepx = robot.getY() - y;
-							stepy = x - robot.getX();
+		case BLOCK_ROBOT :
+		case BLOCK_ROBOT+1 ://System.out.println(etat-BLOCK_ROBOT);
+							stepx = robots[etat-BLOCK_ROBOT].getY() - y;
+							stepy = x - robots[etat-BLOCK_ROBOT].getX();
 							d = ((stepx*(x-x0)+stepy*(y-y0)>0) ? 1 : -1) * (float) Math.sqrt(stepx*stepx + stepy*stepy);
 							stepx /= d;
 							stepy /= d;
@@ -487,7 +492,7 @@ public class Jeu extends Thread {
 		d = (float) Math.sqrt(d*d - dX*dX) - dY;
 		x += d * stepx;
 		y += d * stepy;
-		return movePion(n, x, y, robot) == FREE;
+		return movePion(n, x, y) == FREE;
 	}
 	
 	public void writeAll (String s) {
