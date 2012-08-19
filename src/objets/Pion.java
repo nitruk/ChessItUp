@@ -23,6 +23,8 @@ public class Pion implements Serializable {
 	private int index;
 	private boolean inRobot = false, utile = true;
 	
+// Un point avec des getters et un setter indirect, des dimensions et une couleur
+	
 	public Pion(int x, int y, int figure) {
 		this.x = x;
 		this.y = y;
@@ -49,10 +51,6 @@ public class Pion implements Serializable {
 		this.y = y;
 	}
 	
-	public int getFigure() {
-		return figure; //0 = pion ; 1 = reine ; 2 = roi;
-	}
-	
 	public float getIndex() {
 		return index;
 	}
@@ -61,14 +59,8 @@ public class Pion implements Serializable {
 		return diametre/2;
 	}
 	
-	public boolean isBlockedX (){
-		return ((x-diametre/2)<2 || (x+diametre/2)>3000);
-	}
-	
-	public boolean isBlockedY (){
-		return ((y-diametre/2)<2 || (y+diametre/2)>2100);
-	}
-	
+// Le pion est-il dans un robot?
+
 	public boolean getInRobot (){
 		return inRobot;
 	}
@@ -76,13 +68,15 @@ public class Pion implements Serializable {
 	public void setInRobot (boolean inRobot){
 		this.inRobot = inRobot;
 	}
-	
-	public int getNombre (){
-		return nombre;
-	}
+
+// Le pion représente-t-il une pile ? Pour combien d'éléments compte-t-il ? Y a-t-il une figure au sommet ?
 	
 	public boolean getinPile (){
 		return nombre > 1;
+	}
+	
+	public int getNombre (){
+		return nombre;
 	}
 	
 	public void setInPile (Pion pile){
@@ -94,6 +88,12 @@ public class Pion implements Serializable {
 		nombre ++;
 	}
 	
+	public int getFigure() {
+		return figure; //0 = pion ; 1 = reine ; 2 = roi;
+	}
+
+// Le pion correspond-il encore à quelque chose ? Ou bien a-t-il été incorporé à une pile représentée par un autre pion ?
+
 	public boolean getUtile (){
 		return utile;
 	}

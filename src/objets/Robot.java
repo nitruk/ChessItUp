@@ -6,9 +6,6 @@ import java.io.Serializable;
 
 public class Robot implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public static int moveStep = 18, turnStep = 10;
 	public static int cote = 300;
@@ -18,6 +15,8 @@ public class Robot implements Serializable {
 	private int x, y;
 	private Color couleur;
 	private int tenu = 19;
+	
+// Un point orienté avec des dimensions, une couleur, des getters et des fonctions de mouvement.
 	
 	public Robot(String name, int x, int y, int angle, boolean couleur) {
 		this.name = name;
@@ -67,6 +66,8 @@ public class Robot implements Serializable {
 	public int getCote() {
 		return cote;
 	}
+
+// Que tient de robot ? (Indice du pion dans le tableau des pions, ou 19 si pas de pion).
 
 	public int getTenu() {
 		return tenu;

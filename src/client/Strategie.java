@@ -3,22 +3,21 @@ package client;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import objets.Pion;
 import objets.Robot;
 
 public class Strategie extends Thread implements KeyListener {
 
-	private Robot robots[];
-	private Pion pions[];
+// Les objets à utiliser
+
 	private Communication com;
 	
 	private int cmd;
 	
-	public Strategie (Robot robots[], Pion pions[], Communication com) {
-		this.robots = robots;
-		this.pions = pions;
+	public Strategie (Communication com) {
 		this.com = com;
 	}
+	
+// Une stratégie basique consistant à observer l'utilisation du clavier. :D
 	
 	public void run () {
 		try {
@@ -72,11 +71,9 @@ public class Strategie extends Thread implements KeyListener {
 			cmd = 4;
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_SPACE){
-			//System.out.println(com.catchAndWait());
 			com.catchAndWait();
 		}
 		else if (e.getKeyCode() == KeyEvent.VK_CONTROL){
-			//System.out.println(com.releaseAndWait());
 			com.releaseAndWait();
 		}
 	}

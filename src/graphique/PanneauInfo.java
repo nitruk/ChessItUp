@@ -16,6 +16,8 @@ public class PanneauInfo extends JPanel {
 	private JLabel status;
 	private JLabel noms[] = new JLabel[2];
 	
+// Affichage de l'état du robot contrôlé et des 2 noms des joueurs avec leurs couleurs
+	
 	public PanneauInfo(Robot robots[]) {
 		setPreferredSize(new Dimension (200,696));
 		setLayout(new GridLayout(12,1));
@@ -32,6 +34,8 @@ public class PanneauInfo extends JPanel {
 	public void setStatus (String message) {
 		status.setText(message);
 	}
+	
+// Affichage des scores
 	
 	public void end (int score0, int score1) {
 		noms[0].setText(noms[0].getText() + " : " + score0);

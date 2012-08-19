@@ -359,7 +359,6 @@ public class Jeu extends Thread {
 			dx = robots[i].getX() - x;
 			dy = robots[i].getY() - y;
 			if (dx*dx + dy*dy < margePion2) {
-				//System.out.println(robots[i].getCouleur().toString());
 				if ((etat != FREE) || (dx*(y-pion.getY()) - dy*(x-pion.getX()) == 0)) etat = BLOCKED;
 				else etat = BLOCK_ROBOT;
 			}

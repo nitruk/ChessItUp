@@ -18,6 +18,10 @@ public class TableJeu extends JPanel {
 
 	static final long serialVersionUID = 1;
 
+// Constantes dimensions
+// Dimensions de la vraie table : 3000x2100
+// Rapport 3 entre la table réelle et la table virtuelle
+
 	public static final int mmParPixel = 3;
 	public static final int coteCase = 350 / mmParPixel;
 	public static final int largeurMur = 20 / mmParPixel;
@@ -38,8 +42,6 @@ public class TableJeu extends JPanel {
 	private Pion pions[] = new Pion[nbPions];
 	
 	public TableJeu (Robot robots[], Pion pions[]) {
-		//Dimentions de la vraie table : 3000x2100
-		//Rapport 3 entre la table réelle et la table virtuelle
 		setPreferredSize(new Dimension (largeurPlateau, longueurPlateau));
 		setBackground(couleurFond);
 		this.robots = robots;
@@ -47,25 +49,34 @@ public class TableJeu extends JPanel {
 	    this.repaint();
 	}
 
-	//cette methode affiche les objets graphiques 
+// Affichage des objets graphiques
+
 	public void paintComponent(Graphics g) {
 		int tailleMursGros = 10;
 		super.paintComponent(g);
 		dessinerPlateau(g);
-		//Robots
+
+// Robots
+
 		for (Robot robot : robots) {
 			dessinerRobot(robot, g);
 		}
-		//Pions
+
+// Pions
+
 		for (Pion pion: pions) {
 			dessinerPion(pion, g);
 		}
-		//Murs
+
+// Murs
+
 		Graphics2D g2D = (Graphics2D) g;
 		Stroke s = g2D.getStroke();
 		g2D.setStroke(new BasicStroke(tailleMursGros));
 		g2D.setStroke(s);
 	}
+	
+// Dessin des différentes cases, zones vertes, lignes, murs.
 	
 	public void dessinerPlateau (Graphics g) {
 		g.setColor(Color.GREEN);
@@ -83,7 +94,6 @@ public class TableJeu extends JPanel {
 		for (int i = 0 ; i < 6 ; i ++) {
 			for (int j = 0 ; j < 3 ; j ++) {
 				g.fillRect(largeurBande + largeurLigne + (2*j+(i%2))*coteCase, i*coteCase, coteCase, coteCase);
-				//g.fillRect(x, y, width, height)
 			}
 		}
 		g.setColor(Color.BLACK);

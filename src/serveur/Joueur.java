@@ -16,6 +16,8 @@ public class Joueur extends Thread{
 	Jeu jeu;
 	boolean fini = false;
 	
+// Gère la connexion avec un client.
+	
 	public Joueur (int n, String name, BufferedReader bufR, PrintStream streamW, ObjectOutputStream objectW){
 		this.n = n;
 		this.name = name;
@@ -23,6 +25,8 @@ public class Joueur extends Thread{
 		this.streamW = streamW;
 		this.objectW = objectW;
 	}
+	
+// Attribution d'un Jeu, et départ
 	
 	public void start(Jeu jeu) {
 		this.jeu = jeu;
@@ -32,10 +36,14 @@ public class Joueur extends Thread{
 	public void run() {
 		StringTokenizer mots;
 		String received, command;
-
-		// boucle tant que la durée de vie du Thread est < à 90 secondes
 		try {
+
+// Prévient le client qu'il peut initialiser le décompte.
+
 	 		streamW.println("go");
+
+// Tourne jusqu'à ce que jeu déclare la partie finie et reccueille les requêtes
+
 			while(!fini) {
 				received = bufR.readLine();
 				mots = new StringTokenizer(received);
@@ -75,7 +83,9 @@ public class Joueur extends Thread{
 	public void write (int n) {
 		streamW.println(n);
 	}
-	
+
+// Transmission d'objets sérialisés pour initialiser la partie
+
 	public void writeObject(Object o) {
 		try {
 			objectW.writeObject(o);
@@ -84,7 +94,9 @@ public class Joueur extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+
+// Transmission des scores.
+
 	public void end (int score0, int score1) {
 		write("end");
 		write(score0);

@@ -2,6 +2,9 @@ package objets;
 
 import java.awt.Color;
 
+// Un mur est un point avec des getters.
+// La classe fournit deux tableaux de murs (les verticaus et les horizontaux), et la longueur de chaque type de mur.
+
 public class Mur {
 
 	public static final int longueurH = 200;

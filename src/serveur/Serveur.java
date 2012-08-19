@@ -11,6 +11,8 @@ import java.net.SocketException;
 
 public class Serveur {
 
+// Initialisation de la connection, 2 clients par 2 clients
+
 	public static void main(String args[]) {
 		System.out.println("-- SERVEUR --\n");
 		int port = 4343;
@@ -23,13 +25,11 @@ public class Serveur {
 			Joueur joueur[] = new Joueur[2];
 			Jeu jeu;
 			while (true) {
-				for(int i=0;i<2;i++) {
+				for(int i = 0 ; i < 2 ; i ++) {
 					System.out.println("Waiting for connection with player " + (i+1));
 					Socket echange = ecoute.accept();
 					System.out.println("Connected with player " + (i+1));
-					//ecriture
 					streamW[i] = new PrintStream(echange.getOutputStream());
-					//lecture
 					bufR[i] = new BufferedReader(new InputStreamReader(echange.getInputStream()));
 					objectW[i] = new ObjectOutputStream(echange.getOutputStream());
 					name[i] = bufR[i].readLine();
@@ -37,6 +37,9 @@ public class Serveur {
 					System.out.println("Player " + (i+1) + " (" + name[i] + ") connected");
 					
 				}
+
+// Passage de relai à Jeu et aux Joueurs, et décompte
+
 				try {
 					jeu = new Jeu(joueur);
 					for (int i = 0 ; i < 2 ; i ++) joueur[i].start(jeu);

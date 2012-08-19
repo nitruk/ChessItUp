@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import objets.Pion;
 import objets.Robot;
 import client.Communication;
-import client.Strategie;
+import forth.StrategieForth;
 
 
 public class PanneauGeneral extends JPanel{
@@ -32,8 +32,9 @@ public class PanneauGeneral extends JPanel{
 	private PanneauInfo info;
 	private Communication com;
 	
+// Le panneau crée ses compostans, initialise la connexion, et passe le relai à Communicaiton et Strategie
+	
 	public PanneauGeneral () {	
-		//setPreferredSize(new Dimension (994,696));
 		setBackground(couleurFond);
 		
 		Robot robots[] = new Robot[2];
@@ -46,6 +47,9 @@ public class PanneauGeneral extends JPanel{
 			ObjectInputStream objectR = new ObjectInputStream(s.getInputStream());
 			streamW.println(name);
 			System.out.println("Nom envoye (" + name + ")");
+			
+// Lecture d'objets sérialisés
+			
 			for (int n = 0 ; n < 2 ; n ++) robots[n] = (Robot) objectR.readObject();
 			for (int n = 0 ; n < 19 ; n ++) pions[n] = (Pion) objectR.readObject();
 			
@@ -53,12 +57,13 @@ public class PanneauGeneral extends JPanel{
 			info = new PanneauInfo(robots);
 			com = new Communication(robots, pions, table, info, bufR, streamW);
 
-			//on crée une Box (dans laquelle on met nos JPanel horizontalement) qu'on ajoute au JPanel
+// Création d'une Box (dans laquelle on met nos JPanel horizontalement) qu'on ajoute au JPanel
+
 			setLayout(new BorderLayout());
 		    add(info, BorderLayout.WEST);
 		    add(table, BorderLayout.EAST);
-		    Strategie strat = new Strategie(robots, pions, com);
-		    addKeyListener(strat);
+		    StrategieForth strat = new StrategieForth(com, robots[0]);
+		    //addKeyListener(strat);
 			if (bufR.readLine().compareTo("go") == 0) {
 				com.start();
 				strat.start();
